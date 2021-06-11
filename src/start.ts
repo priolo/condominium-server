@@ -23,7 +23,7 @@ RootService.Start([
 			{
 				class: "http-router",
 				path: "/api",
-				cors: { 
+				cors: {
 					"origin": "*",
 				},
 				children: [
@@ -52,6 +52,29 @@ RootService.Start([
 						]
 					},
 				]
+			},
+			{
+				class: "ws/server",
+				path: "/com",
+				jwt: "/jwt",
+				onConnect: (client, jwtPayload) => {
+					console.log("ws1::onConnect")
+				},
+				onDisconnect: (client) => {
+					console.log("ws1::onDisconnect")
+				},
+				onMessage: async function (client, message, jwtPayload) {
+					console.log( message )
+					console.log( jwtPayload )
+					// await this.dispatch({
+					// 	type: SocketServerActions.SEND,
+					// 	payload: { client, message: "from ws1" }
+					// })
+					// await this.dispatch({
+					// 	type: SocketServerActions.DISCONNECT,
+					// 	payload: client
+					// })
+				},
 			}
 		]
 	},
