@@ -1,110 +1,80 @@
-import { Bus, PathFinder, RepoStructActions, RootService, Router } from "typexpress"
-import path from "path"
+import { RootService } from "typexpress"
+import appConfig from "appConfig"
 
-import repositories from "./repository"
-import AuthRoute from "./routers/AuthRoute"
-import UserRoute from "./routers/UserRoute"
-import { log, LOG_LEVEL } from "@priolo/jon-utils"
+RootService.Start(appConfig)
 
 
 
 
-const ENV_TYPE = {
-	PRODUCTION: "production",
-	DEVELOP: "develop",
-	DEBUG: "debug",
+
+
+/*
+
+// https://developers.google.com/maps/documentation/javascript/examples/map-coordinates
+const TILE_SIZE = 256
+function project(lat, lng) {
+	let siny = Math.sin((lat * Math.PI) / 180);
+
+	// Truncating to 0.9999 effectively limits latitude to 89.189. This is
+	// about a third of a tile past the edge of the world tile.
+	siny = Math.min(Math.max(siny, -0.9999), 0.9999);
+
+	return {
+		x: TILE_SIZE * (0.5 + lng / 360),
+		y: TILE_SIZE * (0.5 - Math.log((1 + siny) / (1 - siny)) / (4 * Math.PI))
+	}
 }
 
-RootService.Start([
-	{
-		class: "http",
-		port: 8080,
-		children: [
-			{
-				class: "http-router",
-				path: "/api",
-				cors: {
-					"origin": "*",
-				},
-				children: [
-					process.env.NODE_ENV == ENV_TYPE.DEBUG ? {
-						class: "http-router",
-						path: "/debug",
-						routers: [
-							{
-								path: "/reset", verb: "post", method: async function (req, res, next) {
-									await new Bus(this, "/typeorm/nodes").dispatch({ type: RepoStructActions.SEED })
-									await new Bus(this, "/typeorm/users").dispatch({ type: RepoStructActions.SEED })
-									res.json({ data: "debug:reset:ok" })
-								}
-							},
-						]
-					} : null,
 
-					{ class: AuthRoute },
+//https://stackoverflow.com/a/1020202/5224029
+MAP_WIDTH = 1000;
+MAP_HEIGHT = 446;
 
-					{
-						class: "http-router/jwt",
-						jwt: "/jwt",
-						strategy: Router.JWT.Strategies.Header,
-						children: [
-							{ class: UserRoute },
-						]
-					},
-				]
-			},
-			{
-				class: "ws/server",
-				path: "/com",
-				jwt: "/jwt",
-				onConnect: (client, jwtPayload) => {
-					console.log("ws1::onConnect")
-				},
-				onDisconnect: (client) => {
-					console.log("ws1::onDisconnect")
-				},
-				onMessage: async function (client, message, jwtPayload) {
-					console.log( message )
-					console.log( jwtPayload )
-					// await this.dispatch({
-					// 	type: SocketServerActions.SEND,
-					// 	payload: { client, message: "from ws1" }
-					// })
-					// await this.dispatch({
-					// 	type: SocketServerActions.DISCONNECT,
-					// 	payload: client
-					// })
-				},
-			}
-		]
-	},
-	{
-		class: "typeorm",
-		options: {
-			type: "sqlite",
-			database: path.join(__dirname, "../db/database.sqlite"),
-			//migrations: ["migration/*.js"],
-			synchronize: true,
-		},
-		children: repositories,
-	},
-	{
-		class: "email",
-		account: {
-			// https://ethereal.email/login
-			host: 'smtp.ethereal.email',
-			port: 587,
-			auth: {
-				user: 'robin.cummerata65@ethereal.email',
-				pass: 'EBnZ54KhH68uUKawGf'
-			}
-		},
-	},
-	{
-		class: "jwt",
-		secret: "secret_word!!!"
-	},
-])
+function convert(lat, lon){
+    var y = ((-1 * lat) + 90) * (MAP_HEIGHT / 180);
+    var x = (lon + 180) * (MAP_WIDTH / 360);
+    return {x:x,y:y};
+}
 
+// https://stackoverflow.com/questions/18883601/function-to-calculate-distance-between-two-coordinates
+function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
+	var R = 6371; // Radius of the earth in km
+	var dLat = deg2rad(lat2-lat1);  // deg2rad below
+	var dLon = deg2rad(lon2-lon1); 
+	var a = 
+	  Math.sin(dLat/2) * Math.sin(dLat/2) +
+	  Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * 
+	  Math.sin(dLon/2) * Math.sin(dLon/2)
+	  ; 
+	var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+	var d = R * c; // Distance in km
+	return d;
+  }
+  
+  function deg2rad(deg) {
+	return deg * (Math.PI/180)
+  }
 
-log.options.level = LOG_LEVEL.DEBUG
+//https://www.geodatasource.com/developers/javascript
+  function distance(lat1, lon1, lat2, lon2, unit) {
+	if ((lat1 == lat2) && (lon1 == lon2)) {
+		return 0;
+	}
+	else {
+		var radlat1 = Math.PI * lat1/180;
+		var radlat2 = Math.PI * lat2/180;
+		var theta = lon1-lon2;
+		var radtheta = Math.PI * theta/180;
+		var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+		if (dist > 1) {
+			dist = 1;
+		}
+		dist = Math.acos(dist);
+		dist = dist * 180/Math.PI;
+		dist = dist * 60 * 1.1515;
+		if (unit=="K") { dist = dist * 1.609344 }
+		if (unit=="N") { dist = dist * 0.8684 }
+		return dist;
+	}
+}
+*/

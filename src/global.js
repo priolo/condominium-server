@@ -7,8 +7,9 @@ export const ENV_TYPE = {
 	DEBUG: "debug",
 }
 
-export const Biblio = {
-	inDebug: () => process.env.NODE_ENV == ENV_TYPE.DEBUG,
+export const Global = {
+	env: process.env.NODE_ENV,
+	inDebug: () => Global.env == ENV_TYPE.DEBUG,
 }
 
 log.options.level = LOG_LEVEL.DEBUG

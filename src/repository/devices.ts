@@ -1,5 +1,4 @@
-import { Biblio } from "../global"
-import { RepoStructActions } from "typexpress"
+
 
 export enum DevicePlatform {
     UNKNOW = 0,
@@ -20,6 +19,16 @@ const repo: any = {
 			pushToken: { name: "push_token", type: "varchar", nullable: true },
 			//browserId: { name: "device_id", type: "varchar", nullable: true },			
 			//lastIp: { name: "last_ip", type: "varchar", nullable: true },
+			createdAt: {
+				name: 'created_at',
+				type: 'timestamp with time zone',
+				createDate: true,
+			},
+			updatedAt: {
+				name: 'updated_at',
+				type: 'timestamp with time zone',
+				updateDate: true,
+			}
 		},
 		relations: {
 			user: {

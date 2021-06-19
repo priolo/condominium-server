@@ -1,9 +1,9 @@
-import user  from "./users"
-import accounts  from "./accounts"
-import devices  from "./devices"
+import users from "./users"
+import accounts from "./accounts"
+import devices from "./devices"
 
 export default [
-	user,
+	users,
 	accounts,
 	devices,
 ]
