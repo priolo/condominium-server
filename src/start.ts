@@ -1,7 +1,9 @@
 import { RootService } from "typexpress"
-import appConfig from "appConfig"
+import buildNodeConfig from "./nodeConfig"
 
-RootService.Start(appConfig)
+const cnf = buildNodeConfig()
+console.log(cnf)
+RootService.Start(cnf)
 
 
 

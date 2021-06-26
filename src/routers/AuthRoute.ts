@@ -45,6 +45,7 @@ class AuthRoute extends Router.Service {
 				payload: { relations: ["user"], where: { pushToken } }
 			})
 		}
+		// se non lo trova usa il "browserID" (da controllare!!!)
 		if ( !devices && browserId ) {
 			devices = await devicesRepo.dispatch({
 				type: Typeorm.Actions.FIND,
@@ -55,7 +56,7 @@ class AuthRoute extends Router.Service {
 		// se trova qualcosa prendo lo user
 		let user = devices?.[0]?.user ?? null
 
-		// se non trova device allora creo il device e lo user
+		// se non lo trova allora creo il device e lo user
 		if ( !user ) {
 			user = {
 				name: generateName(),

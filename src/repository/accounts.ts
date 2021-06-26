@@ -15,16 +15,7 @@ const repo: any = {
 			id: { type: Number, primary: true, generated: true },
 			providerCode: { name: "provider_code", type: "smallint", default: ProviderCode.Unknow },
 			providerId: { name: "provider_id", type: "varchar", nullable: true },
-			createdAt: {
-				name: 'created_at',
-				type: 'timestamp with time zone',
-				createDate: true,
-			},
-			updatedAt: {
-				name: 'updated_at',
-				type: 'timestamp with time zone',
-				updateDate: true,
-			}
+			
 		},
 		relations: {
 			user: {

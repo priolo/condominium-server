@@ -1,17 +1,22 @@
-import appConfig from "appConfig"
-import { ENV_TYPE, Global } from "global"
-import { Bus, PathFinder, RepoStructActions, RootService } from "typexpress"
+import buildNodeConfig from "../nodeConfig"
+import { Bus, RepoStructActions, RootService } from "typexpress"
+import path from "path"
+
+
 
 let root
+const dbPath = path.join(__dirname, "../../db/_database.sqlite")
 
 beforeAll(async () => {
-	
-	Global.env = ENV_TYPE.DEBUG
 
-	root = await RootService.Start(appConfig)
+	// try { if (fs.existsSync(dbPath)) fs.unlinkSync(dbPath) } 
+	// catch (e) { console.log(e) }
 
-	new Bus(root,"typeorm/users").dispatch({ 
-		type: RepoStructActions.SEED, 
+	const cnf = buildNodeConfig(dbPath)
+	root = await RootService.Start(cnf)
+
+	await new Bus(root, "/typeorm/users").dispatch({
+		type: RepoStructActions.SEED,
 		payload: [
 			{ type: RepoStructActions.TRUNCATE },
 			{
@@ -33,7 +38,7 @@ beforeAll(async () => {
 				email: "mattia@test.com",
 				name: "Mattia",
 				password: "111",
-	
+
 			},
 		]
 	})
@@ -41,9 +46,10 @@ beforeAll(async () => {
 
 afterAll(async () => {
 	await RootService.Stop(root)
+	// try { if (fs.existsSync(dbPath)) fs.unlinkSync(dbPath) } 
+	// catch (e) { console.log(e) }
 })
 
-
-test("startup", async () => {
+test("check db have message", async () => {
 	
 })

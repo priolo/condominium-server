@@ -1,5 +1,3 @@
-import { Global } from "../global"
-import { RepoStructActions } from "typexpress"
 
 
 export enum UserRole {
@@ -41,6 +39,7 @@ const repo: any = {
 			messages: {
 				type: "one-to-many",
 				target: "messages",
+				cascade: true,
 				inverseSide: 'user',
 			}
 		},

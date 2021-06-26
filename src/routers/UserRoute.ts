@@ -15,6 +15,9 @@ class UserRoute extends Router.Service {
 		}
 	}
 
+	/**
+	 * Restituisce i dati dello user correntemente loggato (tramite jwt)
+	 */
 	async current(req: Request, res: Response) {
 		const { userRepo } = this.state
 		const payload = req["jwtPayload"]
@@ -30,7 +33,9 @@ class UserRoute extends Router.Service {
 
 		if ( !user ) return res.sendStatus(401)
 
-		res.json({ id: user.id })
+		res.json({ 
+			id: user.id,
+		})
 	}
 }
 
