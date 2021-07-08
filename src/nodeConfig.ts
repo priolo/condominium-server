@@ -1,13 +1,13 @@
 import { Bus, RepoStructActions, Router } from "typexpress"
 import path from "path"
 
-import { wsCommands } from "./ws/wsCommands"
+import { wsCommands } from "./wsocket"
 import repositories from "./repository"
 import AuthRoute from "./routers/AuthRoute"
 import UserRoute from "./routers/UserRoute"
 
 
-const PORT = 8080
+const PORT = 5001
 const DB_PATH = "../db/database.sqlite"
 
 const buildNodeConfig = (dbPath?: string) => {

@@ -28,14 +28,18 @@ const repo: any = {
 				type: 'datetime',
 				updateDate: true,
 			}
-
 		},
 		relations: {
 			user: {
 				type: "many-to-one",
 				target: "users",
-				inverseSide: 'messages',
+				inverseSide: "messages",
 			},
+			comments: {
+				type: "one-to-many",
+				target: "comments",
+				inverseSide: "message",
+			}
 		},
 	}
 }

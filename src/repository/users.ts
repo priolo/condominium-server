@@ -41,6 +41,12 @@ const repo: any = {
 				target: "messages",
 				cascade: true,
 				inverseSide: 'user',
+			},
+			comments: {
+				type: "one-to-many",
+				target: "comments",
+				cascade: true,
+				inverseSide: "user",
 			}
 		},
 	}
