@@ -1,18 +1,29 @@
-import { Bus, RepoStructActions, Router } from "typexpress"
+import { Router } from "typexpress"
 import path from "path"
+import fs from "fs"
 
-import { wsCommands } from "./wsocket"
+import { WSCommands } from "./wsocket"
 import repositories from "./repository"
-import AuthRoute from "./routers/AuthRoute"
-import UserRoute from "./routers/UserRoute"
+import { AuthRoute, UserRoute, testRoute } from "./routers"
+import { ENV } from "./utils"
 
 
 const PORT = 5001
-const DB_PATH = "../db/database.sqlite"
 
-const buildNodeConfig = (dbPath?: string) => {
 
-	if (!dbPath) dbPath = path.join(__dirname, DB_PATH)
+
+const buildNodeConfig = () => {
+
+	let dbPath: string
+	if (process.env.NODE_ENV == ENV.TEST) {
+		try { if (fs.existsSync(dbPath)) fs.unlinkSync(dbPath) }
+		catch (e) { console.log(e) }
+		dbPath = path.join(__dirname, "../db/database.test.sqlite")
+	} else if (process.env.NODE_ENV == ENV.DEV) {
+		dbPath = path.join(__dirname, "../db/database.dev.sqlite")
+	} else {
+		dbPath = path.join(__dirname, "../db/database.sqlite")
+	}
 
 	return [
 		{
@@ -26,19 +37,8 @@ const buildNodeConfig = (dbPath?: string) => {
 						"origin": "*",
 					},
 					children: [
-						process.env.NODE_ENV == "debug" ? {
-							class: "http-router",
-							path: "/debug",
-							routers: [
-								{
-									path: "/reset", verb: "post", method: async function (req, res, next) {
-										await new Bus(this, "/typeorm/nodes").dispatch({ type: RepoStructActions.SEED })
-										await new Bus(this, "/typeorm/users").dispatch({ type: RepoStructActions.SEED })
-										res.json({ data: "debug:reset:ok" })
-									}
-								},
-							]
-						} : null,
+
+						testRoute,
 
 						{ class: AuthRoute },
 
@@ -75,7 +75,7 @@ const buildNodeConfig = (dbPath?: string) => {
 					},
 					children: [
 						{
-							class: wsCommands,
+							class: WSCommands,
 							path: "com",
 						}
 					]

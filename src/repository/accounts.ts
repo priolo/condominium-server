@@ -1,10 +1,6 @@
+import { ProviderCode } from "./utils"
 
 
-export enum ProviderCode {
-	Unknow = 0,
-	Google,
-	Facebook,
-}
 
 const repo: any = {
 	name: "users",

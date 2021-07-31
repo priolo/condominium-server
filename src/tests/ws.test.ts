@@ -9,19 +9,18 @@ import { ACTIONS_TO_CLIENT } from "../wsocket"
 
 
 let root
-const dbPath = path.join(__dirname, "../../db/_database.sqlite")
+//const dbPath = path.join(__dirname, "../../db/_database.sqlite")
+
 
 
 beforeAll(async () => {
-	try { if (fs.existsSync(dbPath)) fs.unlinkSync(dbPath) } catch (e) { console.log(e) }
-
-	const cnf = buildNodeConfig(dbPath)
+	//try { if (fs.existsSync(dbPath)) fs.unlinkSync(dbPath) } catch (e) { console.log(e) }
+	const cnf = buildNodeConfig()
 	root = await RootService.Start(cnf)
 })
 
 afterAll(async () => {
 	await RootService.Stop(root)
-
 	//try { if (fs.existsSync(dbPath)) fs.unlinkSync(dbPath) } catch (e) { console.log(e) }
 })
 
@@ -37,7 +36,6 @@ test("connect and send position", async () => {
 
 	expect(clients[0]["position"]).toEqual({ x: 1, y: 2 })
 })
-
 
 test("send message near", async () => {
 	const resp = []
@@ -98,15 +96,14 @@ test("login and get local messages", async () => {
 
 	// get message on position client 0
 	wsSendGetNearMessages(wss[0])
-	const messages = await waitMessage(wss[0], ACTIONS_TO_CLIENT.MESSAGES_NEAR)
+	const res = await waitMessage(wss[0], ACTIONS_TO_CLIENT.MESSAGES_NEAR)
 
 	// test!
-	expect(messages).toMatchObject([
+	expect(res.payload).toMatchObject([
 		{ text: "secondo" },
 		{ text: "primo" },
 	])
 })
-
 
 test("login and get local clients", async () => {
 
@@ -120,11 +117,11 @@ test("login and get local clients", async () => {
 
 	// get clients near client 0
 	wsSendGetNearClients(wss[0])
-	const clients = await waitMessage(wss[0], ACTIONS_TO_CLIENT.CLIENTS_NEAR)
+	const res = await waitMessage(wss[0], ACTIONS_TO_CLIENT.CLIENTS_NEAR)
 
 	// test!
-	expect(clients).toMatchObject([
-		{ text: "secondo" },
-		{ text: "primo" },
+	expect(res.payload).toMatchObject([
+		{ position: {x: 2, y: 5} },
+		{ position: {x: 1, y: 2} },
 	])
 })

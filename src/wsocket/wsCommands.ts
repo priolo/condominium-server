@@ -5,7 +5,7 @@ const MARGIN:number = 5
 
 
 
-export class wsCommands extends WS.route {
+export class WSCommands extends WS.route {
 
 	onMessage(client: WS.utils.IClient, message:WS.utils.IMessage) {
 		const commands = {
@@ -79,7 +79,7 @@ export class wsCommands extends WS.route {
 	 */
 	private async getNearMessages(clientDest: WS.utils.IClient) {
 		const point = clientDest["position"]
-		const results = this.getNearMessagesFromPoint(point)
+		const results = await this.getNearMessagesFromPoint(point)
 		this.sendToClient(
 			clientDest, 
 			{ 

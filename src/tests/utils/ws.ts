@@ -35,7 +35,7 @@ export async function wsConnectPool(positions: { x: number, y: number }[], port:
 
 //#region SEND
 
-export async function wsSendSetPosition(ws: WebSocket, position: Point): Promise<void> {
+export function wsSendSetPosition(ws: WebSocket, position: Point) {
 	ws.send(JSON.stringify({
 		path: "com", 
 		action: ACTIONS_FROM_CLIENT.POSITION,
@@ -43,7 +43,7 @@ export async function wsSendSetPosition(ws: WebSocket, position: Point): Promise
 	}))
 }
 
-export async function wsSendTextMessage(ws: WebSocket, message: string): Promise<void> {
+export function wsSendTextMessage(ws: WebSocket, message: string) {
 	ws.send(JSON.stringify({
 		path: "com", 
 		action: ACTIONS_FROM_CLIENT.MESSAGE,
@@ -51,14 +51,14 @@ export async function wsSendTextMessage(ws: WebSocket, message: string): Promise
 	}))
 }
 
-export async function wsSendGetNearMessages(ws: WebSocket) {
+export function wsSendGetNearMessages(ws: WebSocket) {
 	ws.send(JSON.stringify({
 		path: "com", 
 		action: ACTIONS_FROM_CLIENT.MESSAGES,
 	}))
 }
 
-export async function wsSendGetNearClients(ws: WebSocket) {
+export function wsSendGetNearClients(ws: WebSocket) {
 	ws.send(JSON.stringify({
 		path: "com", 
 		action: ACTIONS_FROM_CLIENT.NEAR,

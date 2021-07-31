@@ -1,18 +1,16 @@
 import buildNodeConfig from "../nodeConfig"
 import { Bus, RepoStructActions, RootService } from "typexpress"
-import path from "path"
+//import path from "path"
 
 
 
 let root
-const dbPath = path.join(__dirname, "../../db/_database.sqlite")
+//const dbPath = path.join(__dirname, "../../db/_database.sqlite")
 
 beforeAll(async () => {
-
 	// try { if (fs.existsSync(dbPath)) fs.unlinkSync(dbPath) } 
 	// catch (e) { console.log(e) }
-
-	const cnf = buildNodeConfig(dbPath)
+	const cnf = buildNodeConfig()
 	root = await RootService.Start(cnf)
 
 	await new Bus(root, "/typeorm/users").dispatch({

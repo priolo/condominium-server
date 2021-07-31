@@ -1,11 +1,6 @@
+import { UserRole } from "./utils"
 
 
-export enum UserRole {
-	GUEST = 0,
-	UNACTIVE,
-	DEFAULT,
-	ADMIN
-}
 
 
 const repo: any = {
@@ -53,3 +48,4 @@ const repo: any = {
 }
 
 export default repo
+

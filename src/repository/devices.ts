@@ -1,11 +1,4 @@
-
-
-export enum DevicePlatform {
-    UNKNOW = 0,
-    ANDROID,
-    IOS,
-	WEB,
-} 
+import { DevicePlatform } from "./utils"
 
 const repo: any = {
 	name: "devices",

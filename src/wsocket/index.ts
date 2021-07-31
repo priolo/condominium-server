@@ -1,6 +1,5 @@
 import { WS } from "typexpress"
-import { wsCommands } from "./wsCommands"
-
+import { WSCommands } from "./WSCommands"
 
 
 type Rect = {
@@ -77,7 +76,6 @@ function buildRectByPoint(point: Point, dist: number): Rect {
 // }
 
 export {
-	wsCommands,
 	Rect,
 	Point,
 	MessageToClient,
@@ -85,5 +83,6 @@ export {
 	ACTIONS_TO_CLIENT,
 	clientsNearByClient,
 	buildRectByPoint,
+	WSCommands
 }
 
